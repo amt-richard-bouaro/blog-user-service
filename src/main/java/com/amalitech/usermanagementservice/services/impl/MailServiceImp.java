@@ -1,10 +1,11 @@
 package com.amalitech.usermanagementservice.services.impl;
 
+import com.amalitech.usermanagementservice.config.properties.EmailPropertiesConfig;
 import com.amalitech.usermanagementservice.services.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,16 +14,12 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 
 @Service
+@RequiredArgsConstructor
 public class MailServiceImp implements MailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
-    private String fromEmail;
-    
-    public MailServiceImp(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    private final EmailPropertiesConfig emailPropertiesConfig;
     
     @Override
     public void sendEmail(
@@ -54,7 +51,7 @@ public class MailServiceImp implements MailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
-        helper.setFrom(new InternetAddress(fromEmail, "JU Blog"));
+        helper.setFrom(new InternetAddress(emailPropertiesConfig.username(), "JU Blog"));
 
         mailSender.send(message);
     }
