@@ -1,0 +1,51 @@
+services:
+
+  blog-user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: amtrbouaro/blog-user-service:${USER_SERVICE_IMAGE_TAG}
+    container_name: blog-user-service
+    ports:
+      - ${USER_SERVICE_HOST_PORT}:${USER_SERVICE_CONTAINER_PORT}
+    depends_on:
+      blog-user-service-db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:${USER_SERVICE_CONTAINER_PORT}/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - blog-microservice-network
+    env_file:
+      - .env
+
+  # PostgreSQL Databases
+  blog-user-service-db:
+    image: postgres
+    container_name: blog-user-service-db
+    environment:
+      - POSTGRES_DB=${USER_SERVICE_POSTGRES_DATABASE}
+      - POSTGRES_PASSWORD=${USER_SERVICE_POSTGRES_PASSWORD}
+      - POSTGRES_USER=${USER_SERVICE_POSTGRES_USER}
+    ports:
+      - ${USER_SERVICE_POSTGRES_HOST_PORT}:${USER_SERVICE_POSTGRES_CONTAINER_PORT}
+    healthcheck:
+      test: [ "CMD-SHELL", "psql -U ${USER_SERVICE_POSTGRES_USER} -d ${USER_SERVICE_POSTGRES_DATABASE} -c 'SELECT 1' || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - blog-microservice-network
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+
+volumes:
+  user-db-data:
+
+networks:
+  blog-microservice-network:
+    driver: bridge
