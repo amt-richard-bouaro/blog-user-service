@@ -1,0 +1,131 @@
+jwt:
+  token-secret-key: ${JWT_TOKEN_SECRET_KEY}
+  token-expiration: ${JWT_TOKEN_EXPIRATION}
+
+spring:
+  application:
+    name: ${SERVICE_NAME}
+
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+          #          required: true
+          ssl:
+            enable: true
+          trust: ${MAIL_HOST}
+
+cloudinary:
+  cloud_name: ${CLOUDINARY_CLOUD_NAME}
+  api_key: ${CLOUDINARY_CLOUD_KEY}
+  api_secret: ${CLOUDINARY_CLOUD_SECRET}
+
+
+springdoc:
+  api-docs:
+    path: /${SERVICE_NAME}/v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /${SERVICE_NAME}/swagger-ui.html
+    enabled: true
+management:
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+    circuitbreakers:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_TRACING_ENDPOINT}
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: ALWAYS
+  tracing:
+    sampling:
+      probability: 1.0
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      cyclosBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10 # The size of the sliding window in which metrics are recorded
+        permittedNumberOfCallsInHalfOpenState: 3 # Number of calls permitted when the circuit breaker is half open
+        slidingWindowType: COUNT_BASED # The type of sliding window (COUNT_BASED or TIME_BASED)
+        minimumNumberOfCalls: 5 # Minimum number of calls to evaluate before opening the circuit
+        waitDurationInOpenState: 10s # Duration the circuit breaker stays open before transitioning to half open
+        failureRateThreshold: 50 # Failure rate threshold percentage to open the circuit
+        automatic-transition-from-open-to-half-open-enabled: true # Automatically transition from open to half open state
+      ipInfoBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10 # The size of the sliding window in which metrics are recorded
+        permittedNumberOfCallsInHalfOpenState: 3 # Number of calls permitted when the circuit breaker is half open
+        slidingWindowType: COUNT_BASED # The type of sliding window (COUNT_BASED or TIME_BASED)
+        minimumNumberOfCalls: 5 # Minimum number of calls to evaluate before opening the circuit
+        waitDurationInOpenState: 10s # Duration the circuit breaker stays open before transitioning to half open
+        failureRateThreshold: 50 # Failure rate threshold percentage to open the circuit
+        automatic-transition-from-open-to-half-open-enabled: true # Automatically transition from open to half open state
+
+  retry:
+    instances:
+      cyclosBreaker:
+        maxAttempts: 3 # Maximum number of retry attempts
+        waitDuration: 2s # Wait duration between retry attempts
+      ipInfoBreaker:
+        maxAttempts: 3 # Maximum number of retry attempts
+        waitDuration: 2s # Wait duration between retry attempts
+
+  ratelimiter:
+    instances:
+      cyclosBreaker:
+        limitForPeriod: 10 # Number of calls permitted in each refresh period
+        limitRefreshPeriod: 4s # Duration of the refresh period
+        timeoutDuration: 0 # Duration to wait for a permission
+        registerHealthIndicator: true # Whether to register a health indicator
+        eventConsumerBufferSize: 100 # Buffer size for event consumers
+      ipInfoBreaker:
+        limitForPeriod: 10 # Number of calls permitted in each refresh period
+        limitRefreshPeriod: 4s # Duration of the refresh period
+        timeoutDuration: 0 # Duration to wait for a permission
+        registerHealthIndicator: true # Whether to register a health indicator
+        eventConsumerBufferSize: 100 # Buffer size for event consumers
+
+  timelimiter:
+    instances:
+      cyclosBreaker:
+        timeoutDuration: 10s # Timeout duration for a call
+        cancelRunningFuture: false # Whether to cancel the running future if the timeout is exceeded
+
+
+server:
+  port: ${SERVER_PORT}
