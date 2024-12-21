@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -194,6 +195,30 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+
+    /**
+     * Retrieve the profile details of the currently authenticated user.
+     *
+     * @return ResponseEntity containing the authenticated user's profile details.
+     */
+    @Operation(
+            summary = "Get User Profile",
+            description = "Fetches the profile details of a user."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User's profile retrieved successfully.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UserDetailsResponsePayload.class)
+                    )
+            )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDetailsResponsePayload> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userFeatures.getUserProfile(id));
+    }
 
 
 }
