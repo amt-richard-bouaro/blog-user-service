@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 
 /**
- * OpenAPI Configuration class for the User Management Service of the ATM API.
+ * OpenAPI Configuration class for the User Management Service of the Blog API.
  * This class provides metadata for the API documentation including contact information,
  * license, description, title, and server details.
  */
@@ -43,7 +43,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 @Server(
                         description = "Staging Server",
-                        url = "http://blog.local" // Update with the actual production URL when available
+                        url = "http://blog.local"
                 )
         },
         security = {@SecurityRequirement(name = "BearerAuth")}
