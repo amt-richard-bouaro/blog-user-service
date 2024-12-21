@@ -13,4 +13,5 @@ public interface UserFeatures {
     UserDetailsResponsePayload updateUserProfile(UpdateProfileRequestPayload payload);
 
     void updateUserPassword(UpdatePasswordRequestPayload payload);
+    UserDetailsResponsePayload getUserProfile(Long id);
 }

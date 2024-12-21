@@ -91,6 +91,14 @@ public class UserFeaturesFacade implements UserFeatures {
 
     }
 
+    @Override
+    public UserDetailsResponsePayload getUserProfile(Long id) {
+
+        User user = userService.getUserById(id);
+
+       return useDetailsResponseModelMapper.mapToDto(user);
+
+    }
 
 
 }
