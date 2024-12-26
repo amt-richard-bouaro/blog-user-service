@@ -43,7 +43,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 @Server(
                         description = "Staging Server",
-                        url = "http://blog.local"
+                        url = "http://blog.app.local"
                 )
         },
         security = {@SecurityRequirement(name = "BearerAuth")}
