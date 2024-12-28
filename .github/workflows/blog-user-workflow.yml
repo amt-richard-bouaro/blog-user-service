@@ -27,7 +27,7 @@ jobs:
         if: always()
         continue-on-error: true
         with:
-          ref: staging # the branch used for the GitHub Pages content.
+          ref: gh_pages # the branch used for the GitHub Pages content.
           path: gh-pages # an arbitrary name for a directory to which the previous data will be saved.
 
       - name: Build test report
@@ -43,7 +43,7 @@ jobs:
         if: always()
         with:
           github_token: ${{ secrets.TOKEN }}
-          publish_branch: staging
+          publish_branch: gh_pages
           publish_dir: allure-history
 
 #  build-and-publish:
