@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "spring.mail")
 public record EmailPropertiesConfig(
-        @NotBlank String username
+        @NotBlank(message = "Mail username cannot be blank") String username
 
 ) {
 
