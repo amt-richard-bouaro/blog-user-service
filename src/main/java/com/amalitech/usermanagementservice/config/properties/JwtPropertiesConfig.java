@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "jwt")
 public record JwtPropertiesConfig(
-        @NotBlank
+        @NotBlank(message = "Jwt token secret key cannot be blank")
         String tokenSecretKey,
 
         @Min(value = 30000, message = "Token expiration must be at least 30,000 ms")
