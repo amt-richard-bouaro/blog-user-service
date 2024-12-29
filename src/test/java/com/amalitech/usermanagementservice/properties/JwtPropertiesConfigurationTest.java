@@ -1,7 +1,7 @@
 package com.amalitech.usermanagementservice.properties;
 
 import com.amalitech.usermanagementservice.TestEnvironmentTest;
-import com.amalitech.usermanagementservice.config.properties.EmailPropertiesConfig;
+import com.amalitech.usermanagementservice.config.properties.JwtPropertiesConfig;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -24,16 +24,16 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(classes = EmailPropertiesTestEnvironmentTest.TestConfig.class)
+@SpringBootTest(classes = JwtPropertiesConfigurationTest.TestConfig.class)
 @ActiveProfiles("test")
 @Epic("Application Properties")
-@Feature("Email Properties Configuration Test")
-final class EmailPropertiesTestEnvironmentTest extends TestEnvironmentTest {
+@Feature("JWT Properties Configuration Tests")
+final class JwtPropertiesConfigurationTest extends TestEnvironmentTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailPropertiesTestEnvironmentTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtPropertiesConfigurationTest.class);
 
     @Autowired
-    private EmailPropertiesConfig emailPropertiesConfig;
+    private JwtPropertiesConfig jwtPropertiesConfig;
 
     private static Validator validator;
 
@@ -47,25 +47,26 @@ final class EmailPropertiesTestEnvironmentTest extends TestEnvironmentTest {
     }
 
     @Test
-    @Story("Verify valid email properties binding")
-    @Description("This test ensures that the email properties are correctly bound when valid values are provided.")
+    @Story("Verify valid JWT properties binding")
+    @Description("This test ensures that JWT properties are correctly bound when valid properties are provided.")
     void whenPropertiesAreValid_thenPropertiesAreBound() {
-        assertEquals("test@example.com", emailPropertiesConfig.username());
+        assertEquals("secret", jwtPropertiesConfig.tokenSecretKey());
+        assertEquals(864000, jwtPropertiesConfig.tokenExpiration());
     }
 
     @Test
-    @Story("Validate email properties when invalid")
-    @Description("This test ensures that email properties fail validation when invalid data is provided.")
+    @Story("Validate JWT properties when invalid")
+    @Description("This test ensures that JWT properties fail validation when invalid data is provided.")
     void whenPropertiesAreInvalid_thenValidationFails() {
-        EmailPropertiesConfig config = new EmailPropertiesConfig("");
+        JwtPropertiesConfig config = new JwtPropertiesConfig("", 32823L);
 
-        Set<ConstraintViolation<EmailPropertiesConfig>> violations = validator.validate(config);
+        Set<ConstraintViolation<JwtPropertiesConfig>> violations = validator.validate(config);
 
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Mail username cannot be blank")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Jwt token secret key cannot be blank")));
     }
 
-    @EnableConfigurationProperties(EmailPropertiesConfig.class)
+    @EnableConfigurationProperties(JwtPropertiesConfig.class)
     static class TestConfig {
-        // Ensures EmailPropertiesConfig is registered as a bean
+        // Ensures JwtPropertiesConfig is registered as a bean
     }
 }
