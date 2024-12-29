@@ -2,7 +2,7 @@ name: Check Test Coverage
 
 on:
   pull_request:
-    branches: [ "staging", "develop" ]
+    branches: [ "staging" ]
 
 jobs:
   test:
