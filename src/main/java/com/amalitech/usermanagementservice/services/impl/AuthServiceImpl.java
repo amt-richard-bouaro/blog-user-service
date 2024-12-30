@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
     try {
       return (User) principal;
     } catch (Exception e) {
-      throw new InternalServerErrorException("Failed to cast authentication principal to user", e);
+      throw new InternalServerErrorException("Failed to cast authentication principal to user");
     }
 
   }

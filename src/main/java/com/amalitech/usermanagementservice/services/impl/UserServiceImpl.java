@@ -70,13 +70,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
-    @Override
-    public User getUserByUsernameOrEmail(String usernameOrEmail) {
-        return userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new NotFoundException("User with username/email '" + usernameOrEmail + "' does not exist."));
-    }
-
     @Override
     public void verifyCurrentPassword(String existingPassword, String password) {
         if(!passwordEncoder.matches(password, existingPassword)){
