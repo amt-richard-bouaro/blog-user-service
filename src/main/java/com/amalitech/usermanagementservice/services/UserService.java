@@ -17,8 +17,6 @@ public interface UserService {
 
     User saveUser(User user);
 
-    User getUserByUsernameOrEmail(String usernameOrEmail);
-
     void checkThatEmailAndUsernameDoesNotExist(@NotBlank String username, @NotBlank String email);
 
     void updatePassword(User user, String newPassword);

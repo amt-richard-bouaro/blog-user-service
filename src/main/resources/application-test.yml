@@ -6,12 +6,17 @@ spring:
     username: test@example.com
     password: test-password
 
+jwt:
+  token-secret-key: secret
+  token-expiration: 864000
+
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
-    root: INFO
+    root: DEBUG
     org.springframework: WARN
-    com.amalitech: DEBUG
+    com.amalitech.usermanagementservice: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql: TRACE
+
